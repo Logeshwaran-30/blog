@@ -41,7 +41,11 @@ class BlogController extends Controller
     public function show($slug)
     {
         $post = Post::where('slug', $slug)->firstOrFail();
-        return view('blogs.show', compact('post'));
+        $related_posts = Post::where('category_id',$post->category_id)->where('id','!=',$post->id)
+        ->take(3)
+        ->get();
+        return view('blogs.show', compact('post','related_posts'));
+      
     }
 
     public function display($category)
@@ -51,6 +55,7 @@ class BlogController extends Controller
 
         return view('blogs.display', compact('category', 'posts'));
     }
+    
 
     
 }
